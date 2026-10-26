@@ -140,15 +140,6 @@ Single file `index.html` (~4591 lines). Major sections: styles/CSS (1–400); HT
 - **CDN blocked:** host the two pinned libraries locally and update the `<script src>` URLs.
 - **Full screen not working:** browser may not support the Fullscreen API; the CSS immersive fallback still hides the chrome.
 
-## Credits and licenses
-
-- Three.js 0.160.0 (MIT) — https://cdnjs.cloudflare.com/ajax/libs/three.js/0.160.0/three.min.js
-- JSZip 3.10.1 (MIT or GPLv3) — https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js
-- Courier Prime (SIL Open Font License) via Google Fonts — https://fonts.googleapis.com/css2?family=Courier+Prime:wght@700
-- All sound is synthesized; any embedded clips in `SOUND_BANK` must be licensed for use.
-
-Inspired by Kimi's "THE IMPACT No. 01" typewriter showcase; not affiliated with it.
-
 ## LICENSE
 
 <!-- TODO: fill in your license here (e.g. MIT). -->
