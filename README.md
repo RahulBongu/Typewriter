@@ -1,7 +1,5 @@
-# THE IMPACT No. 01 — Mechanical Typewriter
-
 ------- OPEN IN LOCAL HOST AND VIEW IN FULL SCREEN FOR BETTER EXPERIENCE--------
-
+# THE IMPACT No. 01 — Mechanical Typewriter
 
 A single-file, browser-based 3D mechanical typewriter simulator. Every key, typebar, carriage step, bell, ribbon spool and platen roll is modelled and animated in Three.js; all sound is synthesized with the Web Audio API; documents stay on the user's machine and export to DOCX. Built for writers, tinkerers and anyone who wants the feel of a mechanical typewriter without the hardware.
 
