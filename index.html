@@ -24,6 +24,11 @@
   --green:#7f9b6b;
   --font-mono:"Courier New",Courier,monospace;
   --font-display:Georgia,"Times New Roman",serif;
+  --font-credit-name:"Cinzel Decorative",Georgia,"Times New Roman",serif;
+  --font-credit-by:"Playfair Display",Georgia,serif;
+  --credit-1:#f2c4a0;
+  --credit-2:#d98a5c;
+  --credit-3:#9c5a37;
   --shadow:0 18px 50px rgba(0,0,0,.55);
 }
 *{box-sizing:border-box}
@@ -51,6 +56,72 @@ button{-webkit-tap-highlight-color:transparent}
     radial-gradient(80% 70% at 50% 45%, transparent 45%, rgba(0,0,0,.38) 100%),
     linear-gradient(180deg, rgba(0,0,0,.35) 0%, transparent 16%, transparent 78%, rgba(0,0,0,.5) 100%);
 }
+
+/* ---------- credit ---------- */
+.credit{display:inline-flex;align-items:baseline;gap:6px;font-size:inherit;line-height:1}
+.credit-by{
+  font-family:var(--font-credit-by);font-style:italic;font-weight:700;
+  color:var(--brass);letter-spacing:.02em;
+}
+.credit-name{
+  font-family:var(--font-credit-name);font-weight:700;letter-spacing:.08em;
+  background:linear-gradient(180deg,var(--credit-1),var(--credit-2),var(--credit-3));
+  background-size:100% 100%;
+  -webkit-background-clip:text;background-clip:text;color:transparent;
+  filter:drop-shadow(0 0 8px rgba(217,138,92,.5));
+}
+@supports not (background-clip:text){
+  .credit-name{color:var(--credit-1);background:none;-webkit-background-clip:unset;background-clip:unset;filter:none}
+}
+
+/* loading screen credit */
+.loading-credit{
+  position:absolute;left:0;right:0;bottom:max(28px, env(safe-area-inset-bottom));
+  text-align:center;z-index:2;opacity:0;
+  animation:creditFadeIn .8s ease .6s forwards;
+}
+@media (prefers-reduced-motion:reduce){
+  .loading-credit{animation:creditFadeIn .01ms ease 0s forwards}
+}
+.loading-credit .credit-divider{
+  display:flex;align-items:center;justify-content:center;gap:10px;margin-bottom:8px;
+}
+.loading-credit .credit-divider::before,.loading-credit .credit-divider::after{
+  content:"";flex:1 1 0;max-width:120px;height:1px;background:linear-gradient(90deg,transparent,var(--brass-dim),transparent);
+}
+.loading-credit .credit-divider .diamond{
+  width:6px;height:6px;background:var(--brass);transform:rotate(45deg);box-shadow:0 0 6px rgba(196,154,88,.6);
+}
+.loading-credit .credit-name{
+  font-size:clamp(24px,4.4vw,38px);display:inline-block;position:relative;
+}
+.loading-credit .credit-name .ch{
+  display:inline-block;opacity:0;transform:translateY(12px);animation:letterStrike .4s cubic-bezier(.2,.8,.2,1) forwards;
+}
+.loading-credit .credit-name .ch:nth-child(1){animation-delay:.7s}
+.loading-credit .credit-name .ch:nth-child(2){animation-delay:.77s}
+.loading-credit .credit-name .ch:nth-child(3){animation-delay:.84s}
+.loading-credit .credit-name .ch:nth-child(4){animation-delay:.91s}
+.loading-credit .credit-name .ch:nth-child(5){animation-delay:.98s}
+.loading-credit .credit-name .ch:nth-child(6){animation-delay:1.05s}
+.loading-credit .credit-name .ch:nth-child(7){animation-delay:1.12s}
+.loading-credit .credit-name .ch:nth-child(8){animation-delay:1.19s}
+.loading-credit .credit-name .ch:nth-child(9){animation-delay:1.26s}
+.loading-credit .credit-name .ch:nth-child(10){animation-delay:1.33s}
+.loading-credit .credit-name .ch:nth-child(11){animation-delay:1.40s}
+@keyframes letterStrike{0%{opacity:0;transform:translateY(12px)}60%{opacity:1;transform:translateY(-2px)}100%{opacity:1;transform:none}}
+.loading-credit .credit-flourish{
+  display:block;margin:6px auto 0;height:1px;width:0;max-width:180px;
+  background:linear-gradient(90deg,transparent,var(--credit-2),transparent);
+  animation:flourishDraw .6s ease 1.5s forwards;
+}
+@keyframes flourishDraw{to{width:180px}}
+@media (prefers-reduced-motion:reduce){
+  .loading-credit .credit-name .ch{opacity:1;transform:none;animation:none}
+  .loading-credit .credit-flourish{width:180px;animation:none}
+  .credit-name{animation:none}
+}
+@keyframes creditFadeIn{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}
 
 /* ---------- top bar ---------- */
 .topbar{
@@ -107,15 +178,34 @@ button{-webkit-tap-highlight-color:transparent}
 .side::-webkit-scrollbar-thumb{background:var(--brass-dim);border-radius:6px}
 .side::-webkit-scrollbar-track{background:transparent}
 .side.collapsed{transform:translateX(calc(-100% - 24px));transition:transform .3s ease}
-.side.right.collapsed{transform:translateX(calc(100% + 24px))}
+body:not(.immersive) #mechPanel{display:flex;flex-direction:column}
+body.immersive #mechPanel,body.immersive #controlDesk{display:none}
+body.immersive .panel-edge-toggle{display:none}
+body:not(.immersive) #mechPanel > section,body:not(.immersive) #mechPanel > .panel-head,body:not(.immersive) #mechPanel > .panel-badge{flex-shrink:0}
+.panel-credit{margin-top:auto;flex-shrink:0;padding:14px 4px 14px;text-align:center;border-top:1px solid var(--line)}
+.panel-credit .credit-divider{display:flex;align-items:center;justify-content:center;gap:8px;margin-bottom:6px}
+.panel-credit .credit-divider::before,.panel-credit .credit-divider::after{content:"";flex:1 1 0;max-width:60px;height:1px;background:linear-gradient(90deg,transparent,var(--brass-dim),transparent)}
+.panel-credit .credit-divider .diamond{width:5px;height:5px;background:var(--brass);transform:rotate(45deg)}
+.panel-credit .credit-name{font-size:26px;white-space:nowrap;transition:filter .2s ease}
+.panel-credit .credit:hover .credit-name{filter:drop-shadow(0 0 10px rgba(217,138,92,.85))}
+@media (max-width:980px){
+  body:not(.immersive) #mechPanel{display:block}
+}
 .panel-edge-toggle{position:fixed;top:50%;transform:translateY(-50%);z-index:45;width:18px;height:64px;border:1px solid var(--line-strong);background:rgba(16,13,8,.96);color:var(--brass-hi);cursor:pointer;font-size:12px;display:flex;align-items:center;justify-content:center;backdrop-filter:blur(6px)}
 .panel-edge-toggle.left{left:0;border-radius:0 2px 2px 0;border-left:none}
 .panel-edge-toggle.right{right:0;border-radius:2px 0 0 2px;border-right:none}
 .panel-edge-toggle:hover{color:var(--brass-hi);border-color:var(--brass-hi);background:rgba(30,24,15,.98)}
-.fs-toggle{position:fixed;left:50%;transform:translateX(-50%);top:72px;z-index:45;width:44px;height:30px;border:1px solid var(--brass-dim);background:rgba(16,13,8,.92);color:var(--brass-hi);cursor:pointer;border-radius:999px;display:flex;align-items:center;justify-content:center;backdrop-filter:blur(6px)}
+.fs-wrap{position:fixed;left:50%;transform:translateX(-50%);top:72px;z-index:45;display:flex;align-items:center;gap:10px}
+.fs-toggle{width:44px;height:30px;border:1px solid var(--brass-dim);background:rgba(16,13,8,.92);color:var(--brass-hi);cursor:pointer;border-radius:999px;display:flex;align-items:center;justify-content:center;backdrop-filter:blur(6px);position:static}
 .fs-toggle:hover{border-color:var(--brass-hi);background:rgba(30,24,15,.98)}
-body.immersive .fs-toggle{top:12px}
-@media (max-width:980px){.fs-toggle{top:64px}}
+body.immersive .fs-wrap{top:12px}
+body.immersive .fs-hint{display:none}
+@media (max-width:980px){.fs-wrap{top:64px}}
+.fs-hint{font-family:var(--font-mono);font-size:10px;letter-spacing:.12em;color:var(--muted);opacity:.8;pointer-events:none;white-space:nowrap;transition:opacity .25s ease}
+@media (max-width:980px){.fs-hint{font-size:9px}}
+@media (max-width:360px){.fs-hint{font-size:8px}}
+.fs-hint.left{text-align:right}
+.fs-hint.right{text-align:left}
 .panel-head{display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid var(--line);padding-bottom:8px;margin-bottom:9px}
 .panel-head>span{font-family:var(--font-display);font-size:13px;letter-spacing:.19em;text-transform:uppercase;color:var(--brass-hi)}
 .panel-badge{
@@ -418,7 +508,7 @@ body.immersive .immersive-exit{display:flex}
 </style>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Courier+Prime:wght@700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Courier+Prime:wght@700&family=Cinzel+Decorative:wght@700&family=Playfair+Display:ital,wght@1,700&display=swap" rel="stylesheet">
 <body class="view-write">
 
 <div id="stage" aria-hidden="true"><canvas id="scene"></canvas></div>
@@ -426,12 +516,16 @@ body.immersive .immersive-exit{display:flex}
 
 <button id="toggleLeftPanel" class="panel-edge-toggle left" aria-label="Toggle machine panel" aria-expanded="true">‹</button>
 <button id="toggleRightPanel" class="panel-edge-toggle right" aria-label="Toggle control panel" aria-expanded="true">›</button>
-<button id="fullscreenBtn" class="fs-toggle" aria-pressed="false" title="Full screen (Alt+Enter)" aria-label="Full screen (Alt+Enter)">
-  <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-    <path class="fs-expand" d="M4 9V4h5M20 9V4h-5M4 15v5h5M20 15v5h-5"/>
-    <path class="fs-compress" d="M9 4v5H4M15 4v5h5M9 20v-5H4M15 20v-5h5" style="display:none"/>
-  </svg>
-</button>
+<div class="fs-wrap">
+  <span id="fsHintLeft" class="fs-hint" aria-hidden="true">Type something</span>
+  <button id="fullscreenBtn" class="fs-toggle" aria-pressed="false" title="Full screen (Alt+Enter)" aria-label="Full screen (Alt+Enter)">
+    <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+      <path class="fs-expand" d="M4 9V4h5M20 9V4h-5M4 15v5h5M20 15v5h-5"/>
+      <path class="fs-compress" d="M9 4v5H4M15 4v5h5M9 20v-5H4M15 20v-5h5" style="display:none"/>
+    </svg>
+  </button>
+  <span id="fsHintRight" class="fs-hint" aria-hidden="true">on your keyboard</span>
+</div>
 
 <header class="topbar">
   <div class="brand">
@@ -473,6 +567,10 @@ body.immersive .immersive-exit{display:flex}
     <b style="color:var(--brass)">Inspect</b> — orbit and hover labels.<br>
     <b style="color:var(--brass)">Sound</b> — acoustics and waveform.</p>
   </section>
+  <div class="panel-credit">
+    <div class="credit-divider"><span class="diamond"></span></div>
+    <div class="credit"><span class="credit-by">by</span> <span class="credit-name">Rahul Bongu</span></div>
+  </div>
 </aside>
 
 <aside id="controlDesk" class="side right panel" aria-label="Control desk">
@@ -611,6 +709,18 @@ body.immersive .immersive-exit{display:flex}
   <div class="load-sub">No. 01 · engaging mechanism</div>
   <div class="load-bar"><i></i></div>
   <div class="load-note" id="loadNote">Loading pinned libraries…</div>
+  <div class="loading-credit">
+    <div class="credit-divider"><span class="diamond"></span></div>
+    <div class="credit" aria-label="Rahul Bongu">
+      <span class="credit-by">by</span>
+      <span class="credit-name">
+        <span class="ch">R</span><span class="ch">a</span><span class="ch">h</span><span class="ch">u</span><span class="ch">l</span>
+        <span class="ch"> </span>
+        <span class="ch">B</span><span class="ch">o</span><span class="ch">n</span><span class="ch">g</span><span class="ch">u</span>
+      </span>
+    </div>
+    <span class="credit-flourish"></span>
+  </div>
 </div>
 
 <noscript><div style="position:fixed;inset:0;z-index:999;background:#0a0906;color:#e9dfc7;display:flex;align-items:center;justify-content:center;font-family:monospace">JavaScript is required to run the typewriter.</div></noscript>
@@ -1046,6 +1156,7 @@ function setCarriageForCursor(instant) {
 
 function typeChar(ch) {
   if (!ch || ch.length !== 1) return;
+  markTyped();
   ensureAudio();
   if (ch === '\n') { carriageReturn(false); return; }
   if (ch === '\t') { for (let i = 0; i < 4; i++) typeChar(' '); return; }
@@ -1094,6 +1205,7 @@ function typeChar(ch) {
 }
 
 function backspaceDoc() {
+  markTyped();
   ensureAudio();
   if (doc.col > 0) {
     pushUndo();
@@ -1116,6 +1228,7 @@ function backspaceDoc() {
 }
 
 function carriageReturn(automatic) {
+  markTyped();
   ensureAudio();
   pushUndo();
   bellRung = false;
@@ -2271,7 +2384,22 @@ function createHighlightHelpers() {
    ------------------------------------------------------------ */
 let viewName = 'write';
 let stagedShift = false;
-let tourTargetGroup = null;
+let typedOnce = false;
+function markTyped() {
+  if (typedOnce) return;
+  typedOnce = true;
+  const left = document.getElementById('fsHintLeft');
+  const right = document.getElementById('fsHintRight');
+  if (!left || !right) return;
+  left.style.opacity = '0';
+  right.style.opacity = '0';
+  setTimeout(() => {
+    left.textContent = 'Full screen for';
+    right.textContent = 'better experience';
+    left.style.opacity = '';
+    right.style.opacity = '';
+  }, 250);
+}
 let bellStart = 0, returnLeverStart = 0, vibratorStart = 0;
 let pinDipStart = 0, pinDipAmount = 0, pinDipDuration = 90, pinGlow = 0, pinTipMat = null, pinGroup = null;
 let platenRollTarget = 0, spoolTarget = 0, spoolAngle = 0;
@@ -2438,11 +2566,16 @@ function setImmersive(on) {
 
 function toggleFullscreen() {
   const el = document.documentElement;
-  if (document.fullscreenElement || document.webkitFullscreenElement) {
-    if (document.exitFullscreen) document.exitFullscreen();
-    else if (document.webkitExitFullscreen) document.webkitExitFullscreen();
+  if (document.fullscreenElement || document.webkitFullscreenElement || document.body.classList.contains('css-fullscreen')) {
+    // exit
+    setImmersive(false);
+    if (document.exitFullscreen) document.exitFullscreen().catch(() => {});
+    else if (document.webkitExitFullscreen) { try { document.webkitExitFullscreen(); } catch (_) {} }
+    document.body.classList.remove('css-fullscreen');
     return;
   }
+  // enter
+  setImmersive(true);
   if (el.requestFullscreen) {
     el.requestFullscreen().catch(() => { document.body.classList.add('css-fullscreen'); setImmersive(true); });
   } else if (el.webkitRequestFullscreen) {
@@ -3857,6 +3990,7 @@ const TOUR_STEPS = [
 ];
 
 let tourIndex = 0;
+let tourTargetGroup = null;
 let tourSavedExplode = 0;
 let tourSavedCutaway = 0;
 let tourSavedCamera = null;
